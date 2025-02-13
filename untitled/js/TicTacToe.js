@@ -1,83 +1,91 @@
-/*
-let playerSelect = 0;
 
-function changePlayerSelection(player){
-  playerSelect = player^1;
+let playerSelection = 0;
+
+function changeCellColor(cell){
+  if (playerSelection === 1 && cell.style.backgroundColor !== "Grey"){
+    cell.style.backgroundColor = "BLack";
+  } else if (playerSelection === 0 && cell.style.backgroundColor !== "Black"){
+    cell.style.backgroundColor = "Grey";
+  }
+
+  playerSelection = playerSelection ^ 1;
+  console.log(playerSelection);
 }
 
 
-function changeColor(element) {
-  // Toggle between black and grey
-  if (element.style.backgroundColor === "black" ) {
-    console.log("no can do bro")
-  } else {
-    element.style.backgroundColor = "black";
+function registerClick(event){
+  if (event.target.classList.contains("cell")) {
+    console.log("Clicked cell ID:", event.target.id);
+    changeCellColor(event.target);
+    checkWinCondition();
   }
 }
 
-function checkValidGameMove(element){
-  if (element.style.backgroundColor === "black" || element.style.backgroundColor === "grey"){
-    console.log("invalid move")
-  } else {
-    changeColor(element)
-  }
+function cellById(id){
+  return document.getElementById(""+id);
 }
 
-function selectCell(index) {
-  let cell = document.querySelector(`.cell[data-index="${index}"]`);
-  if (cell) {
-    checkValidGameMove(cell);
-  }
+function CellColor(ind){
+  return cellById(ind).style.backgroundColor;
 }
 
-function gameTick(){
-  document.querySelector(".board").addEventListener("click", function (event){
-    if (event.target.classList.contains("cell")){
-      let index = event.target.dataset.index;
-      selectCell(index);
+function checkWinRow(){
+  for (let i = 0; i<9; i+=3){
+    if(CellColor(i) === CellColor(i+1) && CellColor(i+1) === CellColor(i+2)){
+      if(CellColor(i) !== "White") {
+        return CellColor(i);
+      }
     }
   }
-  )
-}
-requestAnimationFrame(gameTick);
-
- */
-let playerSelect = 0;
-
-function changePlayerSelection() {
-  playerSelect = playerSelect ^ 1; // Toggle between 0 and 1
+  return 0;
 }
 
-function changeColor(element) {
-  if (element.style.backgroundColor === "black" || element.style.backgroundColor === "grey") {
-    console.log("no can do bro");
-  } else {
-    element.style.backgroundColor = playerSelect === 0 ? "black" : "grey"; // Assign color based on player
-    changePlayerSelection(); // Switch player
-  }
-}
-
-function checkValidGameMove(element) {
-  if (element.style.backgroundColor === "black" || element.style.backgroundColor === "grey") {
-    console.log("invalid move");
-  } else {
-    changeColor(element);
-  }
-}
-
-function selectCell(index) {
-  let cell = document.querySelector(`.cell[data-index="${index}"]`);
-  if (cell) {
-    checkValidGameMove(cell);
-  }
-}
-
-// Set up event listener when the DOM loads
-document.addEventListener("DOMContentLoaded", function () {
-  document.querySelector(".board").addEventListener("click", function (event) {
-    if (event.target.classList.contains("cell")) {
-      let index = event.target.dataset.index;
-      selectCell(index);
+function checkWinCollum(){
+  for (let i = 0; i<3; i++){
+    if(CellColor(i) === CellColor(i+3) && CellColor(i+3) === CellColor(i+6)){
+      if(CellColor(i) !== "White") {
+        return CellColor(i);
+      }
     }
-  });
-});
+  }
+  return 0;
+}
+
+
+function checkWinDiagonal(){
+  if ((CellColor(0) === CellColor(4) && CellColor(4) === CellColor(8))
+      || (CellColor(2) === CellColor(4) && CellColor(4) === CellColor(6))){
+    if (CellColor(4) !== "White"){
+      return CellColor(4)
+    }
+  }
+  return 0;
+}
+
+function createWinMessage(PlayerColor){
+  let winMsg = document.createElement("p");
+  winMsg.textContent = "Color " + PlayerColor + " has Won!";
+  winMsg.style.fontSize = "40px";
+  winMsg.style.fontStyle = "oblique"
+  winMsg.style.color = PlayerColor;
+  document.getElementById("winDisplay").appendChild(winMsg);
+
+}
+
+function checkWinCondition(){
+  if (checkWinRow()){
+    createWinMessage(checkWinRow());
+  }
+  if (checkWinCollum()){
+    createWinMessage(checkWinCollum());
+  }
+  if(checkWinDiagonal()){
+    createWinMessage(checkWinDiagonal());
+  }
+}
+
+document.getElementById("Board").addEventListener("click", registerClick)
+
+
+
+//document.getElementById("Board").addEventListener("click", registerClick);
