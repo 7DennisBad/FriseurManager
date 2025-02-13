@@ -1,5 +1,6 @@
 
 let playerSelection = 0;
+let gameStage = 1;
 
 function changeCellColor(cell){
   if (playerSelection === 1 && cell.style.backgroundColor !== "Grey"){
@@ -14,7 +15,7 @@ function changeCellColor(cell){
 
 
 function registerClick(event){
-  if (event.target.classList.contains("cell")) {
+  if (event.target.classList.contains("cell") && gameStage) {
     console.log("Clicked cell ID:", event.target.id);
     changeCellColor(event.target);
     checkWinCondition();
@@ -40,7 +41,7 @@ function checkWinRow(){
   return 0;
 }
 
-function checkWinCollum(){
+function checkWinColumn(){
   for (let i = 0; i<3; i++){
     if(CellColor(i) === CellColor(i+3) && CellColor(i+3) === CellColor(i+6)){
       if(CellColor(i) !== "White") {
@@ -75,12 +76,15 @@ function createWinMessage(PlayerColor){
 function checkWinCondition(){
   if (checkWinRow()){
     createWinMessage(checkWinRow());
+    gameStage = 0;
   }
-  if (checkWinCollum()){
-    createWinMessage(checkWinCollum());
+  if (checkWinColumn()){
+    createWinMessage(checkWinColumn());
+    gameStage = 0;
   }
   if(checkWinDiagonal()){
     createWinMessage(checkWinDiagonal());
+    gameStage = 0;
   }
 }
 
