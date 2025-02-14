@@ -14,14 +14,6 @@ function changeCellColor(cell){
 }
 
 
-function registerClick(event){
-  if (event.target.classList.contains("cell") && gameStage) {
-    console.log("Clicked cell ID:", event.target.id);
-    changeCellColor(event.target);
-    checkWinCondition();
-  }
-}
-
 function cellById(id){
   return document.getElementById(""+id);
 }
@@ -30,34 +22,44 @@ function CellColor(ind){
   return cellById(ind).style.backgroundColor;
 }
 
-function checkWinRow(){
-  for (let i = 0; i<9; i+=3){
-    if(CellColor(i) === CellColor(i+1) && CellColor(i+1) === CellColor(i+2)){
-      if(CellColor(i) !== "White") {
-        return CellColor(i);
-      }
-    }
-  }
-  return 0;
-}
+function checkWinRow() {
+  for (let i = 0; i < 9; i += 3) {
+    let first = CellColor(i);
+    let second = CellColor(i + 1);
+    let third = CellColor(i + 2);
 
-function checkWinColumn(){
-  for (let i = 0; i<3; i++){
-    if(CellColor(i) === CellColor(i+3) && CellColor(i+3) === CellColor(i+6)){
-      if(CellColor(i) !== "White") {
-        return CellColor(i);
-      }
+    if (first && first !== "White" && first === second && second === third) {
+      console.log("Win row:", first);
+      return first;
     }
   }
   return 0;
 }
 
 
-function checkWinDiagonal(){
-  if ((CellColor(0) === CellColor(4) && CellColor(4) === CellColor(8))
-      || (CellColor(2) === CellColor(4) && CellColor(4) === CellColor(6))){
-    if (CellColor(4) !== "White"){
-      return CellColor(4)
+function checkWinColumn() {
+  for (let i = 0; i < 3; i++) {
+    let first = CellColor(i);
+    let second = CellColor(i + 3);
+    let third = CellColor(i + 6);
+
+    if (first && first !== "White" && first === second && second === third) {
+      console.log("Win column:", first);
+      return first;
+    }
+  }
+  return 0;
+}
+
+
+function checkWinDiagonal() {
+  let center = CellColor(4);
+
+  if (center && center !== "White") {
+    if ((CellColor(0) === center && CellColor(8) === center) ||
+      (CellColor(2) === center && CellColor(6) === center)) {
+      console.log("Win diagonal:", center);
+      return center;
     }
   }
   return 0;
@@ -85,6 +87,14 @@ function checkWinCondition(){
   if(checkWinDiagonal()){
     createWinMessage(checkWinDiagonal());
     gameStage = 0;
+  }
+}
+
+function registerClick(event){
+  if (event.target.classList.contains("cell") && gameStage) {
+    console.log("Clicked cell ID:", event.target.id);
+    changeCellColor(event.target);
+    checkWinCondition();
   }
 }
 
