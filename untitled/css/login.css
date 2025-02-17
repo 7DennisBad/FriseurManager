@@ -66,6 +66,24 @@ body{
   transform: translateY(-50%);
   font-size: 20px;
 }
+.icon-button {
+  position: absolute;
+  top: 25px;
+  right: -2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #333;
+}
+.icon-button i {
+  pointer-events: auto;
+}
+
+
+.icon-button:hover {
+  color: #007BFF;
+}
 
 .wrapper .rember-forget{
   display: flex;
