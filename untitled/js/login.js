@@ -1,4 +1,21 @@
 
+
+// Passwort anzeigen/ausblenden
+const passwordInput = document.getElementById('password');
+const toggleButton = document.getElementById('togglePassword');
+const icon = document.getElementById('icon');
+
+toggleButton.addEventListener('click', () => {
+  if (passwordInput.type === 'password') {
+    passwordInput.type = 'text';
+    icon.className = 'bx bxs-lock-open-alt';
+  } else {
+    passwordInput.type = 'password';
+    icon.className = 'bx bxs-lock-alt';
+  }
+});
+
+// Login-Funktion
 function proceedLogin(){
   console.log("Login successful!");
   window.location.href = "../html/minigame.html";
